@@ -2,8 +2,8 @@
   "version": "1.0",
   "services": {
     "web": {
-      "type": "static",
-      "publicPath": "."
+      "type": "generator",
+      "publicPath": "dist"
     }
   }
 }
