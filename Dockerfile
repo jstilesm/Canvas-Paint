@@ -1,9 +1,7 @@
-FROM node:24.19
-
-RUN corepack enable
-
-WORKDIR /app
+FROM node:22-alpine
+WORKDIR /code
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 COPY . .
-
-RUN yarn install && \
-    yarn build
+EXPOSE 8000
+CMD ["yarn", "web"]
