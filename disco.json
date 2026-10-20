@@ -2,8 +2,7 @@
   "version": "1.0",
   "services": {
     "web": {
-      "type": "generator",
-      "publicPath": "dist"
+      "port": 8000
     }
   }
 }
