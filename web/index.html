@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Paint Plotter</title>
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Paint&nbsp;Plotter</h1>
+    <p class="bed-label" id="bed-label">&nbsp;</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel draw-panel">
+      <div class="toolbar">
+        <div class="tool-group" role="radiogroup" aria-label="Tool">
+          <button class="tool" data-tool="pen" aria-pressed="true">Draw</button>
+          <button class="tool" data-tool="line" aria-pressed="false" title="Straight line. Hold Shift to snap to 45&deg;.">Line</button>
+          <button class="tool" data-tool="rect" aria-pressed="false" title="Rectangle. Hold Shift for a square.">Rect</button>
+          <button class="tool" data-tool="triangle" aria-pressed="false" title="Triangle. Hold Shift for equilateral.">Triangle</button>
+          <button class="tool" data-tool="ellipse" aria-pressed="false" title="Ellipse. Hold Shift for a circle.">Ellipse</button>
+          <button class="tool" data-tool="fill" aria-pressed="false">Fill</button>
+          <button class="tool" data-tool="erase" aria-pressed="false">Whiteout</button>
+        </div>
+
+        <div class="tool-group" id="pen-picker" role="radiogroup" aria-label="Pen"></div>
+
+        <div class="tool-group">
+          <button id="undo" title="Undo (Cmd/Ctrl+Z)">Undo</button>
+          <button id="redo" title="Redo (Shift+Cmd/Ctrl+Z)">Redo</button>
+          <button id="import-svg" title="Import an SVG file, or drop one onto the canvas">Import SVG</button>
+          <button id="clear" class="danger">Clear</button>
+          <input type="file" id="svg-file" accept=".svg,image/svg+xml" hidden />
+        </div>
+      </div>
+
+      <div class="canvas-frame">
+        <canvas id="canvas" aria-label="Drawing surface"></canvas>
+      </div>
+
+      <div class="settings">
+        <label>
+          Margin
+          <input type="range" id="margin" min="0" max="40" step="1" value="10" />
+          <output id="margin-out">10 mm</output>
+        </label>
+        <label>
+          Simplify
+          <input type="range" id="tolerance" min="0" max="3" step="0.05" value="0.3" />
+          <output id="tolerance-out">0.30 mm</output>
+        </label>
+        <label>
+          Smoothing
+          <input type="range" id="smooth" min="0" max="5" step="1" value="1" />
+          <output id="smooth-out">1 pass</output>
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" id="live" checked />
+          Live preview
+        </label>
+        <label>
+          Hatch
+          <input type="range" id="hatch-spacing" min="0.4" max="6" step="0.1" value="1.5" />
+          <output id="hatch-spacing-out">1.5 mm</output>
+        </label>
+        <label>
+          Angle
+          <input type="range" id="hatch-angle" min="0" max="175" step="5" value="45" />
+          <output id="hatch-angle-out">45&deg;</output>
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" id="hatch-cross" />
+          Cross-hatch
+        </label>
+        <label class="checkbox" title="Packs up to 8 coordinate pairs into each PA command. Smaller files, but some plotters reject multi-point PA and will refuse the whole plot.">
+          <input type="checkbox" id="batch-pa" />
+          Batch PA
+        </label>
+      </div>
+    </section>
+
+    <section class="panel output-panel">
+      <div class="output-header">
+        <div class="tabs" role="tablist">
+          <button class="tab" data-tab="preview" aria-selected="true">Plot preview</button>
+          <button class="tab" data-tab="code" aria-selected="false">HP-GL</button>
+        </div>
+        <div class="tool-group">
+          <button id="generate" class="primary">Generate</button>
+          <button id="copy">Copy</button>
+          <button id="download">Download .hpgl</button>
+          <button id="send" class="send" disabled>Send to plotter</button>
+          <button id="stop" class="danger" hidden>Stop</button>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-preview">
+        <div class="preview-frame" id="preview">
+          <p class="empty">Draw something, then generate a plot.</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-code" hidden>
+        <pre class="code" id="code">IN;</pre>
+      </div>
+
+      <dl class="stats" id="stats"></dl>
+
+      <div class="plot-feed" id="plot-feed" hidden>
+        <div class="plot-bar"><span id="plot-bar-fill"></span></div>
+        <p class="plot-line" id="plot-line">&nbsp;</p>
+      </div>
+
+      <p class="status" id="status" role="status">&nbsp;</p>
+    </section>
+  </main>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
